@@ -28,14 +28,16 @@ class MainWindow(object):
     def __init__(self, master):
         self.master = master
         master.title("Yeelight Control")
-        bc = BulbsController()
-        for index, bulb in enumerate(bc.get_bulbs()):
+        self.bc = BulbsController()
+
+    def _draw(self):
+        self.master.
+        for index, bulb in enumerate(self.bc.get_bulbs()):
             bulb_name = str(index) + ' ' + bulb.__str__()
             self.label = Label(master, text=bulb_name)
             self.label.grid(row=index, column=0)
             self.toggle_button = Button(master, text='Toggle', command=bulb.toggle)
             self.toggle_button.grid(row=index, column=1)
-
 
 
 if __name__ == '__main__':
