@@ -36,6 +36,9 @@ class BulbsController(object):
         if len(self._bulbs) > 0:
             file = os.path.join(DEFAULT_FILE_PATH, FILENAME)
             self.save_bulbs_to_file(file)
+        if len(self._bulbs) == 0:
+            print 'discovery failed, loading from file'
+            self.load_bulbs_from_file()
 
     def refresh(self):
         self._discover_bulbs()
@@ -83,9 +86,17 @@ class BulbsController(object):
     def _load_state_to_bulb(self, bulb=None):
         if not bulb:
             for bulb in self._bulbs:
-                bulb.get_properties()
+                try:
+                    bulb.get_properties()
+                except BulbException as e:
+                    print e
         else:
             bulb.get_properties()
+
+    def _execute_command_on_bulb(self, bulb, cmd):
+            command = getattr(bulb, cmd)
+            command()
+
 
 if __name__ == '__main__':
     bc = BulbsController()
