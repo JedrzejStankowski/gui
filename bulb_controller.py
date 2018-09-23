@@ -2,21 +2,15 @@ from yeelight import Bulb
 from yeelight import BulbType
 from yeelight import discover_bulbs
 from yeelight import BulbException
-from utils import DEFAULT_FILE_PATH,FILENAME
+from utils import DEFAULT_FILE_PATH, FILENAME
 
 import os
-
-
-class ColorBulb(Bulb):
-    pass
-
-class WhiteBulb(Bulb):
-    pass
 
 
 class BulbsController(object):
 
     def __init__(self):
+        self._bulbs = []
         self._discover_bulbs()
         self._load_state_to_bulb()
 
@@ -34,8 +28,8 @@ class BulbsController(object):
             print bulb['capabilities']
             self._bulbs.append(Bulb(bulb['ip']))
         if len(self._bulbs) > 0:
-            file = os.path.join(DEFAULT_FILE_PATH, FILENAME)
-            self.save_bulbs_to_file(file)
+            bulbs_file = os.path.join(DEFAULT_FILE_PATH, FILENAME)
+            self.save_bulbs_to_file(bulbs_file)
         if len(self._bulbs) == 0:
             print 'discovery failed, loading from file'
             self.load_bulbs_from_file()
@@ -65,23 +59,23 @@ class BulbsController(object):
         return bulbs
 
     def load_bulbs_from_file(self, file_path=os.path.join(DEFAULT_FILE_PATH, FILENAME)):
-        file = open(file_path, 'r')
+        bulb_file = open(file_path, 'r')
         self._bulbs = []
-        for line in file.readlines():
+        for line in bulb_file.readlines():
             bulb = Bulb(line)
             self._bulbs.append(bulb)
-        file.close()
+        bulb_file.close()
 
     def _is_bulb_responding(self, bulb):
          pass#todo
 
     def save_bulbs_to_file(self, file_path):
-        file = open(file_path, 'w')
+        bulb_file = open(file_path, 'w')
         lines = []
         for bulb in self._bulbs:
             lines.append(bulb._ip + '\n')
-        file.writelines(lines)
-        file.close()
+        bulb_file.writelines(lines)
+        bulb_file.close()
 
     def _load_state_to_bulb(self, bulb=None):
         if not bulb:
@@ -102,4 +96,3 @@ if __name__ == '__main__':
     bc = BulbsController()
     print bc.count_bulb_type(BulbType.Color)
     print bc.count_bulb_type(BulbType.WhiteTemp)
-    bc.load_bulbs_from_file()
