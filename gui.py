@@ -15,9 +15,10 @@ class MainWindow(object):
 
     def _draw_frame(self):
         self.frame = Frame(self.master).grid(row=0)
+        self.attach_legend(self.frame)
         for index, bulb in enumerate(self.bc.get_bulbs()):
             print bulb
-
+            index += 1
             bulb_name = str(index) + ' ' + bulb.__str__()
             label = Label(self.frame, text=bulb_name)
             label.grid(row=index, column=0)
@@ -41,6 +42,14 @@ class MainWindow(object):
                 set_color_button.grid(row=index, column=4)
                 set_color_button['command'] = lambda bulb_param=bulb, button=set_color_button:\
                     self.__class__.change_color(button, bulb_param)
+
+    @staticmethod
+    def attach_legend(master):
+        Label(master, text='Bulb Name').grid(row=0, column=0)
+        Label(master, text='Toggle').grid(row=0, column=1)
+        Label(master, text='Bulb Brightness').grid(row=0, column=2)
+        Label(master, text='Bulb Temperature').grid(row=0, column=3)
+        Label(master, text='Bulb Color').grid(row=0, column=4)
 
     @staticmethod
     def change_color(button, bulb):

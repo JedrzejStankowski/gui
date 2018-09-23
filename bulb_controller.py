@@ -80,17 +80,17 @@ class BulbsController(object):
     def _load_state_to_bulb(self, bulb=None):
         if not bulb:
             for bulb in self._bulbs:
-                try:
-                    bulb.get_properties()
-                except BulbException as e:
-                    print e
+                self.execute_command_on_bulb(bulb, 'get_properties')
         else:
-            bulb.get_properties()
+            self.execute_command_on_bulb(bulb, 'get_properties')
 
-    def _execute_command_on_bulb(self, bulb, cmd):
+    @staticmethod
+    def execute_command_on_bulb(bulb, cmd):
+        try:
             command = getattr(bulb, cmd)
             command()
-
+        except BulbException as e:
+            print e
 
 if __name__ == '__main__':
     bc = BulbsController()
