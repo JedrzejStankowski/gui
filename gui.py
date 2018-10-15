@@ -12,6 +12,7 @@ class MainWindow(object):
         master.title("Yeelight Control")
         self.bc = BulbsController()
         self._draw_frame()
+        self.set_window_position()
 
     def _draw_frame(self):
         self.frame = Frame(self.master).grid(row=0)
@@ -42,6 +43,15 @@ class MainWindow(object):
                 set_color_button.grid(row=index, column=4)
                 set_color_button['command'] = lambda bulb_param=bulb, button=set_color_button:\
                     self.__class__.change_color(button, bulb_param)
+
+    def set_window_position(self):
+        height = 40 + self.bc.get_bulbs_number() * 35
+        width = 650
+        height_sc = self.master.winfo_screenheight()
+        width_sc = self.master.winfo_screenwidth()
+        x = (width_sc / 6) - (width / 2)
+        y = height_sc - height - 75
+        self.master.geometry('%dx%d+%d+%d' % (width, height, x, y))
 
     @staticmethod
     def attach_legend(master):
